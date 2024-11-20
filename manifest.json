@@ -1,0 +1,23 @@
+{
+  "name": "MS Teams Aliasing",
+  "description": "Be able to give name alias to the chat of MS Teams",
+  "version": "0.1",
+  "manifest_version": 3,
+  "permissions": [
+    "scripting",
+    "webNavigation",
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://teams.microsoft.com/*"
+  ],
+  "action": {
+    "default_popup": "config.html",
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}

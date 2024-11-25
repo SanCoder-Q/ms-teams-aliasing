@@ -1,0 +1,16 @@
+name: Build and Deploy
+on: [push]
+jobs:
+  deployment:
+    environment: prod
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '14'
+      - run: |
+          npm install && npm run build -- $GITHUB_RUN_NUMBER
+          TOKEN=$(chrome-webstore-manager token --client_id ${{ secrets.CLIENT_ID }} --client_secret ${{ secrets.CLIENT_SECRET }})
+          chrome-webstore-manager update -t $TOKEN ${{ vars.EXTENSION_ID }} ./dist/build/ms -teams-aliasing.zip
+          chrome-webstore-manager publish -t $TOKEN ${{ vars.EXTENSION_ID }}

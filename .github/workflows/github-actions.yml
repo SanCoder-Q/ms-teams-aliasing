@@ -4,8 +4,6 @@ jobs:
   deployment:
     environment: prod
     runs-on: ubuntu-latest
-    env:
-      EXTENSION_ID: ${{ vars.EXTENSION_ID }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -13,6 +11,6 @@ jobs:
           node-version: '14'
       - run: |
           npm install && npm run build -- $GITHUB_RUN_NUMBER
-          export TOKEN=$(chrome-webstore-manager token --client_id ${{ secrets.CLIENT_ID }} --client_secret ${{ secrets.CLIENT_SECRET }})
-          npm run update
-          npm run publish
+          TOKEN=$(npx chrome-webstore-manager token --client_id ${{ secrets.CLIENT_ID }} --client_secret ${{ secrets.CLIENT_SECRET }})
+          npx chrome-webstore-manager update -t $TOKEN ${{ vars.EXTENSION_ID }} ./dist/build/ms -teams-aliasing.zip
+          npx chrome-webstore-manager publish -t $TOKEN ${{ vars.EXTENSION_ID }}
